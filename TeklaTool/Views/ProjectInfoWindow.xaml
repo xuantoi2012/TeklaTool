@@ -1,0 +1,182 @@
+﻿<Window x:Class="TeklaTool.Views.ProjectInfoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Thông tin dự án" 
+        Width="550" SizeToContent="Height"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="#F5F7FA">
+
+    <Border Margin="16" Padding="24" 
+            Background="White" 
+            CornerRadius="8" 
+            BorderBrush="#E5E7EB" 
+            BorderThickness="1">
+        <Border.Effect>
+            <DropShadowEffect Color="#000000" Opacity="0.08" 
+                            BlurRadius="12" ShadowDepth="2"/>
+        </Border.Effect>
+
+        <StackPanel>
+            <!-- Header -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                <TextBlock Text="📋" FontSize="20" Margin="0,0,8,0"/>
+                <TextBlock Text="Thông tin dự án" 
+                           FontSize="18" 
+                           FontWeight="SemiBold" 
+                           Foreground="#2563EB"
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+            <TextBlock Text="Nhập thông tin để xuất kèm file Excel" 
+                       FontSize="12" 
+                       Foreground="#6B7280"
+                       Margin="0,0,0,20"/>
+
+            <!-- Project Name -->
+            <TextBlock Text="Tên công trình:" 
+                       FontSize="12" 
+                       FontWeight="Medium"
+                       Foreground="#374151"
+                       Margin="0,0,0,6"/>
+            <TextBox Text="{Binding ProjectName, UpdateSourceTrigger=PropertyChanged}" 
+                     Style="{StaticResource ModernTextBox}"
+                     Margin="0,0,0,16"/>
+
+            <!-- Designer -->
+            <TextBlock Text="Người thiết kế:" 
+                       FontSize="12" 
+                       FontWeight="Medium"
+                       Foreground="#374151"
+                       Margin="0,0,0,6"/>
+            <TextBox Text="{Binding Designer, UpdateSourceTrigger=PropertyChanged}" 
+                     Style="{StaticResource ModernTextBox}"
+                     Margin="0,0,0,16"/>
+
+            <!-- Delivery Location -->
+            <TextBlock Text="Địa điểm giao hàng:" 
+                       FontSize="12" 
+                       FontWeight="Medium"
+                       Foreground="#374151"
+                       Margin="0,0,0,6"/>
+            <TextBox Text="{Binding DeliveryLocation, UpdateSourceTrigger=PropertyChanged}" 
+                     Style="{StaticResource ModernTextBox}"
+                     Margin="0,0,0,16"/>
+
+            <!-- Logo Section -->
+            <TextBlock Text="Logo công ty (tùy chọn):" 
+                       FontSize="12" 
+                       FontWeight="Medium"
+                       Foreground="#374151"
+                       Margin="0,0,0,6"/>
+
+            <Border BorderBrush="{StaticResource BorderBrush}" 
+                    BorderThickness="1" 
+                    CornerRadius="6"
+                    Background="#F9FAFB"
+                    Padding="12"
+                    Margin="0,0,0,20">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Logo Preview -->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                        <Border Width="60" Height="60" 
+                                Background="White"
+                                BorderBrush="{StaticResource BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="4"
+                                Margin="0,0,12,0">
+                            <Image x:Name="LogoPreview" 
+                                   Stretch="Uniform"
+                                   RenderOptions.BitmapScalingMode="HighQuality">
+                                <Image.Style>
+                                    <Style TargetType="Image">
+                                        <Style.Triggers>
+                                            <Trigger Property="Source" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+                            </Image>
+                        </Border>
+
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock x:Name="LogoFileName" 
+                                       Text="Chưa chọn file"
+                                       FontSize="11"
+                                       Foreground="#374151"
+                                       FontWeight="Medium"/>
+                            <TextBlock Text="PNG, JPG, JPEG (tối đa 5MB)" 
+                                       FontSize="10"
+                                       Foreground="#9CA3AF"
+                                       Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Browse Button -->
+                    <Button Grid.Column="1" 
+                            Content="📁 Chọn file"
+                            Click="BrowseLogo_Click"
+                            Height="36"
+                            Padding="16,8"
+                            FontSize="12"
+                            Background="White"
+                            Foreground="#374151"
+                            BorderThickness="1"
+                            BorderBrush="{StaticResource BorderBrush}"
+                            Cursor="Hand">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="6"
+                                        Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter HorizontalAlignment="Center" 
+                                                    VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#F3F4F6"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!-- Separator -->
+            <Border Height="1" 
+                    Background="{StaticResource BorderBrush}" 
+                    Margin="0,0,0,20"/>
+
+            <!-- Buttons -->
+            <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Right">
+                <Button Content="❌ Hủy" 
+                        Width="100" 
+                        Height="36" 
+                        Margin="0,0,12,0"
+                        Click="Cancel_Click"
+                        Style="{StaticResource ThirdButton}"
+                        Cursor="Hand"/>
+
+                <Button Content="✓ Lưu và Xuất Excel" 
+                        Width="Auto" 
+                        Height="36"
+                        Click="Save_Click"
+                        Style="{StaticResource SuccessButton}"
+                        Cursor="Hand"/>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</Window>

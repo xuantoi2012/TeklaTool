@@ -1,0 +1,111 @@
+﻿<Window x:Class="TeklaTool.Views.LicenseWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Quản lý bản quyền" 
+        Width="480" Height="330"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="#F5F7FA"
+        WindowStyle="SingleBorderWindow">
+
+    <Border Margin="16" Padding="16" 
+            Background="White" 
+            CornerRadius="8" 
+            BorderBrush="#E5E7EB" 
+            BorderThickness="1">
+        <StackPanel>
+            <!-- Header -->
+            <TextBlock Text="🔐 Quản Lý Bản Quyền" 
+                       FontSize="16" 
+                       FontWeight="SemiBold" 
+                       Foreground="{StaticResource PrimaryBrush}" 
+                       Margin="0,0,0,16"/>
+
+            <!-- Machine ID Section -->
+            <TextBlock Text="Mã máy của bạn:" 
+                       FontSize="11" 
+                       FontWeight="Medium"
+                       Foreground="#374151" 
+                       Margin="0,0,0,4"/>
+            <Grid Margin="0,0,0,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0"
+                         Height="32"
+                         IsReadOnly="True" 
+                         Text="{Binding MachineIdentity}" 
+                         VerticalContentAlignment="Center"
+                         FontSize="12"
+                         Padding="8,0"
+                         Margin="0,0,8,0"
+                         Style="{StaticResource ModernTextBox}"/>
+                <Button Grid.Column="1"
+                        Content="📋 Copy" 
+                        Width="95"
+                        Height="32"
+                        Command="{Binding CopyIdCommand}" 
+                        Style="{StaticResource ThirdButton}"
+                        FontSize="11"/>
+            </Grid>
+
+            <!-- License Key Section -->
+            <TextBlock Text="Nhập mã kích hoạt:" 
+                       FontSize="11" 
+                       FontWeight="Medium"
+                       Foreground="#374151" 
+                       Margin="0,0,0,4"/>
+            <Grid Margin="0,0,0,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0"
+                         Height="32"
+                         Text="{Binding LicenseKey}" 
+                         VerticalContentAlignment="Center"
+                         FontSize="12"
+                         Padding="8,0"
+                         Margin="0,0,8,0"
+                         Style="{StaticResource ModernTextBox}"/>
+                <Button Grid.Column="1"
+                        Content="✓ Kích hoạt" 
+                        Width="95"
+                        Height="32"
+                        Command="{Binding CheckLicenseCommand}" 
+                        Style="{StaticResource SuccessButton}"
+                        FontSize="11"/>
+            </Grid>
+
+            <!-- Status Section -->
+            <Border Background="#F0FDF4" 
+                    BorderBrush="#86EFAC" 
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="12,8">
+                <StackPanel>
+                    <TextBlock Text="Trạng thái:" 
+                               FontSize="10" 
+                               FontWeight="Medium"
+                               Foreground="#166534"
+                               Margin="0,0,0,4"/>
+                    <TextBlock Text="{Binding LicenseStatus}"
+                               FontSize="12"
+                               Foreground="#15803D"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Info Text -->
+            <TextBlock Margin="0,12,0,0"
+                       FontSize="10"
+                       Foreground="#6B7280"
+                       TextWrapping="Wrap"
+                       HorizontalAlignment="Center">
+                <Run Text="Liên hệ để nhận mã kích hoạt: "/>
+                <Run Text="xuantoitran@example.com" FontWeight="SemiBold"/>
+            </TextBlock>
+        </StackPanel>
+    </Border>
+</Window>
