@@ -1,0 +1,889 @@
+﻿<Window x:Class="TeklaTool_2017.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="⚙️ Cài đặt &amp; Trợ giúp" 
+        MinWidth="700" 
+        MinHeight="650" SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="#F5F7FA">
+
+    <Border Style="{StaticResource ModernCard}" Margin="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- ===== HEADER WITH TABS ===== -->
+            <Border Grid.Row="0" 
+                    Background="#F9FAFB" 
+                    BorderBrush="#E5E7EB"
+                    BorderThickness="0,0,0,1"
+                    Padding="24,16">
+                <StackPanel>
+                    <TextBlock Text="⚙️ Cài đặt &amp; Trợ giúp" 
+                               FontSize="18" 
+                               FontWeight="SemiBold" 
+                               Foreground="#1F2937"/>
+
+                    <!-- Tab Buttons -->
+                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                        <RadioButton x:Name="TabSettings" 
+                                     Content="⚙️ Cài đặt" 
+                                     IsChecked="True"
+                                     Style="{StaticResource TabRadioButton}"
+                                     Margin="0,0,8,0"/>
+                        <RadioButton x:Name="TabHelp" 
+                                     Content="❓ Hướng dẫn"
+                                     Style="{StaticResource TabRadioButton}"
+                                     Margin="0,0,8,0"/>
+                        <RadioButton x:Name="TabAbout" 
+                                     Content="ℹ️ Giới thiệu"
+                                     Style="{StaticResource TabRadioButton}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- ===== CONTENT AREA ===== -->
+            <ScrollViewer Grid.Row="1" 
+                          VerticalScrollBarVisibility="Auto"
+                          Padding="24,20">
+                <StackPanel>
+                    <!-- ===== TAB 1: SETTINGS ===== -->
+                    <StackPanel x:Name="SettingsTab">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsChecked, ElementName=TabSettings}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+
+                        <!-- Chia làm 2 cột: trái là menu items, phải là thuộc tính -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- ===== CỘT TRÁI: MENU ITEMS ===== -->
+                            <Border Grid.Column="0" 
+                                    Background="#F9FAFB" 
+                                    BorderBrush="#E5E7EB"
+                                    BorderThickness="0,0,1,0"
+                                    Padding="0,0,16,0"
+                                    Margin="0,0,16,0">
+                                <StackPanel>
+                                    <TextBlock Text="📦 Loại vật liệu" 
+                                               FontSize="12" 
+                                               FontWeight="SemiBold" 
+                                               Foreground="#6B7280" 
+                                               Margin="12,0,0,12"/>
+
+                                    <!-- Menu Item: Thép tấm -->
+                                    <RadioButton x:Name="ItemPlate" 
+                                                 Content="🔲 Thép tấm" 
+                                                 IsChecked="True"
+                                                 Margin="0,0,0,4">
+                                        <RadioButton.Style>
+                                            <Style TargetType="RadioButton">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="RadioButton">
+                                                            <Border x:Name="Border"
+                                                                    Background="Transparent"
+                                                                    Padding="12,10"
+                                                                    CornerRadius="6"
+                                                                    Margin="4,0">
+                                                                <TextBlock Text="{TemplateBinding Content}" 
+                                                                           FontSize="13"
+                                                                           Foreground="#374151"/>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsChecked" Value="True">
+                                                                    <Setter TargetName="Border" Property="Background" Value="#DBEAFE"/>
+                                                                    <Setter TargetName="Border" Property="BorderBrush" Value="#3B82F6"/>
+                                                                    <Setter TargetName="Border" Property="BorderThickness" Value="1"/>
+                                                                </Trigger>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter TargetName="Border" Property="Background" Value="#F3F4F6"/>
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                            </RadioButton.Style>
+                                    </RadioButton>
+
+                                    <!-- Menu Item: Thép hình -->
+                                    <RadioButton x:Name="ItemShape" 
+                                                 Content="📏 Thép hình" 
+                                                 Margin="0,0,0,4">
+                                        <RadioButton.Style>
+                                            <Style TargetType="RadioButton">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="RadioButton">
+                                                            <Border x:Name="Border"
+                                                                    Background="Transparent"
+                                                                    Padding="12,10"
+                                                                    CornerRadius="6"
+                                                                    Margin="4,0">
+                                                                <TextBlock Text="{TemplateBinding Content}" 
+                                                                           FontSize="13"
+                                                                           Foreground="#374151"/>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsChecked" Value="True">
+                                                                    <Setter TargetName="Border" Property="Background" Value="#DBEAFE"/>
+                                                                    <Setter TargetName="Border" Property="BorderBrush" Value="#3B82F6"/>
+                                                                    <Setter TargetName="Border" Property="BorderThickness" Value="1"/>
+                                                                </Trigger>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter TargetName="Border" Property="Background" Value="#F3F4F6"/>
+                                                                </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </RadioButton.Style>
+                                    </RadioButton>
+
+                                    <!-- Menu Item: Bulong -->
+                                    <RadioButton x:Name="ItemBolt" 
+                                                 Content="🔩 Bulong" 
+                                                 Margin="0,0,0,4">
+                                        <RadioButton.Style>
+                                            <Style TargetType="RadioButton">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="RadioButton">
+                                                            <Border x:Name="Border"
+                                                                    Background="Transparent"
+                                                                    Padding="12,10"
+                                                                    CornerRadius="6"
+                                                                    Margin="4,0">
+                                                                <TextBlock Text="{TemplateBinding Content}" 
+                                                                           FontSize="13"
+                                                                           Foreground="#374151"/>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsChecked" Value="True">
+                                                                    <Setter TargetName="Border" Property="Background" Value="#DBEAFE"/>
+                                                                    <Setter TargetName="Border" Property="BorderBrush" Value="#3B82F6"/>
+                                                                    <Setter TargetName="Border" Property="BorderThickness" Value="1"/>
+                                                                </Trigger>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter TargetName="Border" Property="Background" Value="#F3F4F6"/>
+                                                                </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </RadioButton.Style>
+                                    </RadioButton>
+
+                                    <!-- Menu Item: Xà gồ -->
+                                    <RadioButton x:Name="ItemPurlin" 
+                                                 Content="〰️ Xà gồ" 
+                                                 Margin="0,0,0,4">
+                                        <RadioButton.Style>
+                                            <Style TargetType="RadioButton">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="RadioButton">
+                                                            <Border x:Name="Border"
+                                                                    Background="Transparent"
+                                                                    Padding="12,10"
+                                                                    CornerRadius="6"
+                                                                    Margin="4,0">
+                                                                <TextBlock Text="{TemplateBinding Content}" 
+                                                                           FontSize="13"
+                                                                           Foreground="#374151"/>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsChecked" Value="True">
+                                                                    <Setter TargetName="Border" Property="Background" Value="#DBEAFE"/>
+                                                                    <Setter TargetName="Border" Property="BorderBrush" Value="#3B82F6"/>
+                                                                    <Setter TargetName="Border" Property="BorderThickness" Value="1"/>
+                                                                </Trigger>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter TargetName="Border" Property="Background" Value="#F3F4F6"/>
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                            </RadioButton.Style>
+                                    </RadioButton>
+
+                                    <!-- Menu Item: Ty xà gồ -->
+                                    <RadioButton x:Name="ItemSagRod" 
+                                                 Content="⚡ Ty xà gồ" 
+                                                 Margin="0,0,0,4">
+                                        <RadioButton.Style>
+                                            <Style TargetType="RadioButton">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="RadioButton">
+                                                            <Border x:Name="Border"
+                                                                    Background="Transparent"
+                                                                    Padding="12,10"
+                                                                    CornerRadius="6"
+                                                                    Margin="4,0">
+                                                                <TextBlock Text="{TemplateBinding Content}" 
+                                                                           FontSize="13"
+                                                                           Foreground="#374151"/>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsChecked" Value="True">
+                                                                    <Setter TargetName="Border" Property="Background" Value="#DBEAFE"/>
+                                                                    <Setter TargetName="Border" Property="BorderBrush" Value="#3B82F6"/>
+                                                                    <Setter TargetName="Border" Property="BorderThickness" Value="1"/>
+                                                                </Trigger>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter TargetName="Border" Property="Background" Value="#F3F4F6"/>
+                                                                </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </RadioButton.Style>
+                                    </RadioButton>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- ===== CỘT PHẢI: THUỘC TÍNH ===== -->
+                            <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                <!-- Panel: Thép tấm -->
+                                <StackPanel x:Name="PanelPlate">
+                                    <StackPanel.Style>
+                                        <Style TargetType="StackPanel">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsChecked, ElementName=ItemPlate}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
+
+                                    <TextBlock Text="🔲 Thép tấm - Giá trị mặc định" 
+                                               FontSize="14" 
+                                               FontWeight="SemiBold" 
+                                               Foreground="#1F2937" 
+                                               Margin="0,0,0,16"/>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+
+                                            <!-- Chiều rộng -->
+                                            <TextBlock Grid.Row="0" Grid.Column="0" 
+                                                   Text="Chiều rộng (mm):" 
+                                                   FontSize="12" 
+                                                   Foreground="#374151" 
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,16,12"/>
+                                            <TextBox Grid.Row="0" Grid.Column="1" 
+                                                 Text="{Binding DefaultPlateWidth, UpdateSourceTrigger=PropertyChanged}" 
+                                                 Style="{StaticResource ModernTextBox}" 
+                                                 Height="36" 
+                                                 Margin="0,0,0,12"/>
+
+                                            <!-- Chiều dài -->
+                                            <TextBlock Grid.Row="1" Grid.Column="0" 
+                                                   Text="Chiều dài (mm):" 
+                                                   FontSize="12" 
+                                                   Foreground="#374151" 
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,16,12"/>
+                                            <TextBox Grid.Row="1" Grid.Column="1" 
+                                                 Text="{Binding DefaultPlateLength, UpdateSourceTrigger=PropertyChanged}" 
+                                                 Style="{StaticResource ModernTextBox}" 
+                                                 Height="36" 
+                                                 Margin="0,0,0,12"/>
+
+                                            <!-- Vật liệu -->
+                                            <TextBlock Grid.Row="2" Grid.Column="0" 
+                                                   Text="Vật liệu:" 
+                                                   FontSize="12" 
+                                                   Foreground="#374151" 
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,16,0"/>
+                                            <ComboBox Grid.Row="2" Grid.Column="1" 
+                                                  SelectedItem="{Binding DefaultPlateMaterial}" 
+                                                  Height="36" 
+                                                  Style="{StaticResource ModernComboBox}">
+                                                <sys:String>SS400</sys:String>
+                                                <sys:String>Q345</sys:String>
+                                                <sys:String>Q355</sys:String>
+                                            </ComboBox>
+                                    </Grid>
+                                </StackPanel>
+
+                                <!-- Panel: Thép hình -->
+                                <StackPanel x:Name="PanelShape">
+                                    <StackPanel.Style>
+                                        <Style TargetType="StackPanel">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsChecked, ElementName=ItemShape}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                                </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
+
+                                    <TextBlock Text="📏 Thép hình - Giá trị mặc định" 
+                                               FontSize="14" 
+                                               FontWeight="SemiBold" 
+                                               Foreground="#1F2937" 
+                                               Margin="0,0,0,16"/>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <!-- Chiều dài -->
+                                        <TextBlock Grid.Row="0" Grid.Column="0" 
+                                                   Text="Chiều dài (mm):" 
+                                                   FontSize="12" 
+                                                   Foreground="#374151" 
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,16,12"/>
+                                        <TextBox Grid.Row="0" Grid.Column="1" 
+                                                 Text="{Binding DefaultShapeLength, UpdateSourceTrigger=PropertyChanged}" 
+                                                 Style="{StaticResource ModernTextBox}" 
+                                                 Height="36" 
+                                                 Margin="0,0,0,12"/>
+
+                                        <!-- Vật liệu -->
+                                        <TextBlock Grid.Row="1" Grid.Column="0" 
+                                                   Text="Vật liệu:" 
+                                                   FontSize="12" 
+                                                   Foreground="#374151" 
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,16,0"/>
+                                        <ComboBox Grid.Row="1" Grid.Column="1" 
+                                                  SelectedItem="{Binding DefaultShapeMaterial}" 
+                                                  Height="36" 
+                                                  Style="{StaticResource ModernComboBox}">
+                                            <sys:String>SS400</sys:String>
+                                            <sys:String>Q345</sys:String>
+                                            <sys:String>Q355</sys:String>
+                                        </ComboBox>
+                                    </Grid>
+                                </StackPanel>
+
+                                <!-- Panel: Bulong -->
+                                <StackPanel x:Name="PanelBolt">
+                                    <StackPanel.Style>
+                                        <Style TargetType="StackPanel">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsChecked, ElementName=ItemBolt}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                                </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
+
+                                    <TextBlock Text="🔩 Bulong - Cường độ mặc định" 
+                                               FontSize="14" 
+                                               FontWeight="SemiBold" 
+                                               Foreground="#1F2937" 
+                                               Margin="0,0,0,16"/>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock Grid.Column="0" 
+                                                   Text="Cường độ:" 
+                                                   FontSize="12" 
+                                                   Foreground="#374151" 
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,16,0"/>
+                                            <ComboBox Grid.Column="1" 
+                                                  SelectedItem="{Binding DefaultBoltGrade}" 
+                                                  Height="36" 
+                                                  Style="{StaticResource ModernComboBox}">
+                                                <sys:String>CB 4. 6</sys:String>
+                                                <sys:String>CB 5.6</sys:String>
+                                                <sys:String>CB 8.8</sys:String>
+                                                <sys:String>CB 10.9</sys:String>
+                                            </ComboBox>
+                                    </Grid>
+                                </StackPanel>
+
+                                <!-- Panel: Xà gồ -->
+                                <StackPanel x:Name="PanelPurlin">
+                                    <StackPanel.Style>
+                                        <Style TargetType="StackPanel">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsChecked, ElementName=ItemPurlin}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                                </Style.Triggers>
+                                        </Style>
+                                        </StackPanel.Style>
+
+                                        <TextBlock Text="〰️ Xà gồ - Giá trị mặc định" 
+                                               FontSize="14" 
+                                               FontWeight="SemiBold" 
+                                               Foreground="#1F2937" 
+                                               Margin="0,0,0,16"/>
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+
+                                            <!-- Cường độ -->
+                                            <TextBlock Grid.Row="0" Grid.Column="0" 
+                                                   Text="Cường độ:" 
+                                                   FontSize="12" 
+                                                   Foreground="#374151" 
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,16,12"/>
+                                            <ComboBox Grid.Row="0" Grid.Column="1" 
+                                                  SelectedItem="{Binding DefaultPurlinGrade}" 
+                                                  Height="36" 
+                                                  Margin="0,0,0,12"
+                                                  Style="{StaticResource ModernComboBox}">
+                                                <sys:String>G275-Z80</sys:String>
+                                                <sys:String>G300-Z80</sys:String>
+                                                <sys:String>G350-Z80</sys:String>
+                                                <sys:String>G450-Z80</sys:String>
+                                                <sys:String>G550-Z80</sys:String>
+                                            </ComboBox>
+
+                                            <!-- Vật liệu -->
+                                            <TextBlock Grid.Row="1" Grid.Column="0" 
+                                                   Text="Vật liệu:" 
+                                                   FontSize="12" 
+                                                   Foreground="#374151" 
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,16,0"/>
+                                            <ComboBox Grid.Row="1" Grid.Column="1" 
+                                                  SelectedItem="{Binding DefaultPurlinMaterial}" 
+                                                  Height="36" 
+                                                  Style="{StaticResource ModernComboBox}">
+                                                <sys:String>Mạ kẽm</sys:String>
+                                                <sys:String>Thép đen</sys:String>
+                                            </ComboBox>
+                                        </Grid>
+                                </StackPanel>
+
+                                <!-- Panel: Ty xà gồ -->
+                                <StackPanel x:Name="PanelSagRod">
+                                    <StackPanel.Style>
+                                        <Style TargetType="StackPanel">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsChecked, ElementName=ItemSagRod}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                                </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
+
+                                    <TextBlock Text="⚡ Ty xà gồ - Vật liệu mặc định" 
+                                               FontSize="14" 
+                                               FontWeight="SemiBold" 
+                                               Foreground="#1F2937" 
+                                               Margin="0,0,0,16"/>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0" 
+                                                   Text="Vật liệu:" 
+                                                   FontSize="12" 
+                                                   Foreground="#374151" 
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,16,0"/>
+                                        <ComboBox Grid.Column="1" 
+                                                  SelectedItem="{Binding DefaultSagRodMaterial}" 
+                                                  Height="36" 
+                                                  Style="{StaticResource ModernComboBox}">
+                                            <sys:String>Mạ kẽm</sys:String>
+                                            <sys:String>Thép đen</sys:String>
+                                        </ComboBox>
+                                    </Grid>
+                                </StackPanel>
+
+                                <!-- Separator -->
+                                <Separator Margin="0,24,0,24"/>
+
+                                <!-- Làm tròn số - Đặt dưới cùng -->
+                                <Border Background="#EFF6FF" 
+                                        BorderBrush="#DBEAFE" 
+                                        BorderThickness="1" 
+                                        CornerRadius="6" 
+                                        Padding="16">
+                                    <StackPanel>
+                                        <TextBlock Text="📐 Làm tròn số" 
+                                                   FontSize="13" 
+                                                   FontWeight="SemiBold" 
+                                                   Foreground="#1E40AF" 
+                                                   Margin="0,0,0,12"/>
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Số lượng -->
+                                            <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                                                <TextBlock Text="Số thập phân (Số lượng):" 
+                                                           FontSize="11" 
+                                                           Foreground="#1E40AF" 
+                                                           Margin="0,0,0,6"/>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox Text="{Binding QuantityDecimalPlaces, UpdateSourceTrigger=PropertyChanged}" 
+                                                             Style="{StaticResource ModernTextBox}" 
+                                                             Width="60" 
+                                                             Height="32"/>
+                                                    <TextBlock Text="(0-3)" 
+                                                               FontSize="10" 
+                                                               Foreground="#3B82F6" 
+                                                               VerticalAlignment="Center" 
+                                                               Margin="8,0,0,0"/>
+                                                </StackPanel>
+                                            </StackPanel>
+
+                                            <!-- Khối lượng -->
+                                            <StackPanel Grid.Column="1">
+                                                <TextBlock Text="Số thập phân (Khối lượng):" 
+                                                           FontSize="11" 
+                                                           Foreground="#1E40AF" 
+                                                           Margin="0,0,0,6"/>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox Text="{Binding WeightDecimalPlaces, UpdateSourceTrigger=PropertyChanged}" 
+                                                             Style="{StaticResource ModernTextBox}" 
+                                                             Width="60" 
+                                                             Height="32"/>
+                                                    <TextBlock Text="(0-3)" 
+                                                               FontSize="10" 
+                                                               Foreground="#3B82F6" 
+                                                               VerticalAlignment="Center" 
+                                                               Margin="8,0,0,0"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Grid>
+
+                                        <TextBlock TextWrapping="Wrap" 
+                                                   FontSize="10" 
+                                                   Foreground="#3B82F6" 
+                                                   Margin="0,12,0,0"
+                                                   LineHeight="16">
+                                            <Run Text="• Thép tấm:" FontWeight="SemiBold"/>
+                                            <Run Text=" &lt;0.5 → xuống, ≥0.5 → lên"/>
+                                            <LineBreak/>
+                                            <Run Text="• Thép hình, Ty, Xà gồ:" FontWeight="SemiBold"/>
+                                            <Run Text=" luôn làm tròn lên"/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Nút Reset -->
+                                <Button Content="🔄 Đặt lại mặc định" 
+                                        Command="{Binding ResetToDefaultsCommand}" 
+                                        Style="{StaticResource WarningButton}" 
+                                        Width="160" 
+                                        Height="36" 
+                                        HorizontalAlignment="Right"
+                                        Margin="0,16,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- ===== TAB 2: HELP ===== -->
+                    <StackPanel x:Name="HelpTab">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsChecked, ElementName=TabHelp}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                                <!-- Quick Start -->
+                                <TextBlock Text="🚀 Hướng dẫn sử dụng" 
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Foreground="#1F2937"
+                                   Margin="0,0,0,12"/>
+
+                                <Border Background="#F9FAFB" 
+                                BorderBrush="#E5E7EB" 
+                                BorderThickness="1" 
+                                CornerRadius="6"
+                                Padding="16"
+                                Margin="0,0,0,20">
+                                    <StackPanel>
+                                        <TextBlock TextWrapping="Wrap" FontSize="12" LineHeight="20" Foreground="#374151">
+                                    <Run Text="Bước 1: Chọn Parts/Model" FontWeight="Bold" Foreground="#2563EB"/>
+                                    <LineBreak/>
+                                    <Run Text="   • "/>
+                                    <Run Text="Select Parts:" FontWeight="SemiBold"/>
+                                    <Run Text=" Chọn từng parts trong Tekla (nhấn Backspace khi xong)"/>
+                                    <LineBreak/>
+                                    <Run Text="   • "/>
+                                    <Run Text="Select All Model:" FontWeight="SemiBold"/>
+                                    <Run Text=" Lấy toàn bộ parts trong model"/>
+                                    <LineBreak/><LineBreak/>
+                                    
+                                    <Run Text="Bước 2: Nhập thông số" FontWeight="Bold" Foreground="#2563EB"/>
+                                    <LineBreak/>
+                                    <Run Text="   • "/>
+                                    <Run Text="Thép tấm:" FontWeight="SemiBold"/>
+                                    <Run Text=" Kích thước chuẩn (1500x6000), vật liệu (SS400)"/>
+                                    <LineBreak/>
+                                    <Run Text="   • "/>
+                                    <Run Text="Thép hình:" FontWeight="SemiBold"/>
+                                    <Run Text=" Chiều dài chuẩn (12000mm), vật liệu (SS400)"/>
+                                    <LineBreak/>
+                                    <Run Text="   • "/>
+                                    <Run Text="Bulong:" FontWeight="SemiBold"/>
+                                    <Run Text=" Cường độ (8.8)"/>
+                                    <LineBreak/>
+                                    <Run Text="   • "/>
+                                    <Run Text="Ty/Xà gồ:" FontWeight="SemiBold"/>
+                                    <Run Text=" Filter để lọc theo Assembly/Profile"/>
+                                    <LineBreak/><LineBreak/>
+                                    
+                                    <Run Text="Bước 3: Xử lý dữ liệu" FontWeight="Bold" Foreground="#2563EB"/>
+                                    <LineBreak/>
+                                    <Run Text="   • Data tự động xử lý ngay sau khi Select Parts/Model"/>
+                                    <LineBreak/>
+                                    <Run Text="   • Nhập Filter vào ô 'Filter', click "/>
+                                    <Run Text="Tính lại" FontWeight="SemiBold"/>
+                                    <Run Text=" để áp dụng"/>
+                                    <LineBreak/><LineBreak/>
+                                    
+                                    <Run Text="Bước 4: Xuất Excel" FontWeight="Bold" Foreground="#2563EB"/>
+                                    <LineBreak/>
+                                    <Run Text="   • Click nút "/>
+                                    <Run Text="Xuất Excel" FontWeight="SemiBold"/>
+                                    <LineBreak/>
+                                    <Run Text="   • Nhập thông tin dự án (tên công trình, người thiết kế...)"/>
+                                    <LineBreak/>
+                                    <Run Text="   • Chọn logo công ty (tùy chọn)"/>
+                                    <LineBreak/>
+                                    <Run Text="   • File Excel sẽ tự động mở sau khi xuất"/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                                <!-- Filter Guide -->
+                                <TextBlock Text="🔍 Hướng dẫn Filter Ty/Xà gồ" 
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Foreground="#1F2937"
+                                   Margin="0,0,0,12"/>
+
+                                <Border Background="#FEF3C7" 
+                                BorderBrush="#FDE68A" 
+                                BorderThickness="1" 
+                                CornerRadius="6"
+                                Padding="16">
+                                    <StackPanel>
+                                        <TextBlock TextWrapping="Wrap" FontSize="12" LineHeight="20" Foreground="#92400E">
+                                    <Run Text="Cách sử dụng:" FontWeight="Bold"/>
+                                    <LineBreak/>
+                                    <Run Text="• Nhập tên Assembly HOẶC Profile vào ô Filter"/>
+                                    <LineBreak/>
+                                    <Run Text="• Có thể nhập nhiều keywords, phân cách bởi:"/>
+                                    <LineBreak/>
+                                    <Run Text="  - Phím cách (space)"/>
+                                    <LineBreak/>
+                                    <Run Text="  - Dấu phẩy (,)"/>
+                                    <LineBreak/>
+                                    <Run Text="  - Chấm phẩy (;)"/>
+                                    <LineBreak/>
+                                    <Run Text="• Click nút "/>
+                                    <Run Text="Tính lại" FontWeight="SemiBold"/>
+                                    <Run Text=" để áp dụng filter"/>
+                                    <LineBreak/><LineBreak/>
+                                    
+                                    <Run Text="Ví dụ:" FontWeight="Bold"/>
+                                    <LineBreak/>
+                                    <Run Text="• Nhập: "/>
+                                    <Run Text="SRA" FontWeight="Bold" Foreground="#DC2626"/>
+                                    <Run Text=" → Lọc Assembly chứa 'SRA'"/>
+                                    <LineBreak/>
+                                    <Run Text="• Nhập: "/>
+                                    <Run Text="ROD12" FontWeight="Bold" Foreground="#DC2626"/>
+                                    <Run Text=" → Lọc Profile chứa 'ROD12'"/>
+                                    <LineBreak/>
+                                    <Run Text="• Nhập: "/>
+                                    <Run Text="SRA ROD12" FontWeight="Bold" Foreground="#DC2626"/>
+                                    <Run Text=" → Lọc 'SRA' HOẶC 'ROD12'"/>
+                                    <LineBreak/>
+                                    <Run Text="• Nhập: "/>
+                                    <Run Text="CC, ZZ" FontWeight="Bold" Foreground="#DC2626"/>
+                                    <Run Text=" → Lọc 'CC' HOẶC 'ZZ'"/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- ===== TAB 3: ABOUT ===== -->
+                    <StackPanel x:Name="AboutTab">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsChecked, ElementName=TabAbout}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                 </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+
+                        <!-- App Info -->
+                        <Border Background="#F9FAFB" 
+                                BorderBrush="#E5E7EB" 
+                                BorderThickness="1" 
+                                CornerRadius="6"
+                                Padding="24"
+                                Margin="0,0,0,20">
+                            <StackPanel HorizontalAlignment="Center">
+                                <Image Source="/Images/beam image.png" Height="100" Width="100"/>
+                                <TextBlock Text="Phần mềm tạo đơn hàng tự động v2017" 
+                                           FontSize="16"
+                                           FontWeight="Bold"
+                                           Foreground="#1F2937"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,0,0,4"/>
+                                <TextBlock Text="Version 1.0.1" 
+                                           FontSize="12"
+                                           Foreground="#6B7280"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,0,0,16"/>
+
+                                <TextBlock Text="Công cụ tạo đơn hàng tự động từ Tekla Structures" 
+                                           FontSize="11"
+                                           Foreground="#6B7280"
+                                           TextAlignment="Center"
+                                           TextWrapping="Wrap"
+                                           MaxWidth="350"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- License Info -->
+                        <TextBlock Text="📄 Bản quyền" 
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Foreground="#1F2937"
+                                   Margin="0,0,0,12"/>
+
+                        <Border Background="#F9FAFB" 
+                                BorderBrush="#E5E7EB" 
+                                BorderThickness="1" 
+                                CornerRadius="6"
+                                Padding="16">
+                            <TextBlock TextWrapping="Wrap" FontSize="11" LineHeight="18" Foreground="#6B7280">
+                                <Run Text="© 2025 Đại Phát Steel.  All rights reserved. "/>
+                                <LineBreak/><LineBreak/>
+                                <Run Text="Phần mềm này được phát triển riêng cho Công ty Cổ phần Kết cấu thép Đại Phát. "/>
+                                <LineBreak/>
+                                <Run Text="Nghiêm cấm sao chép, phân phối hoặc sử dụng cho mục đích thương mại khác."/>
+                            </TextBlock>
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ===== FOOTER BUTTONS ===== -->
+            <Border Grid.Row="2" 
+                    Background="#F9FAFB"
+                    BorderBrush="#E5E7EB"
+                    BorderThickness="0,1,0,0"
+                    Padding="24,16">
+                <StackPanel Orientation="Horizontal" 
+                            HorizontalAlignment="Right">
+                    <Button Content="❌ Hủy" 
+                            Width="100" 
+                            Height="35" 
+                            Margin="0,0,12,0"
+                            Click="Cancel_Click">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource SecondaryButton}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsChecked, ElementName=TabSettings}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <Button Width="100" Height="35" Click="Save_Click">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource SuccessButton}">
+                                <Setter Property="Content" Value="✓ Lưu"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsChecked, ElementName=TabSettings}" Value="False">
+                                        <Setter Property="Content" Value="✓ Đóng"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

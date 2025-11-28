@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using TeklaTool.Services;
-using TeklaTool.Helpers;
+using TeklaTool_2017.Helpers;
+using TeklaTool_2017.Services;
 
-namespace TeklaTool.ViewModels
+namespace TeklaTool_2017.ViewModels
 {
     public class LicenseViewModel : BaseViewModel
     {
@@ -178,7 +178,7 @@ namespace TeklaTool.ViewModels
                     // DEBUG: Verify file was created
                     string licenseFolder = System.IO.Path.Combine(
                         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                        "TeklaTool");
+                        "TeklaTool_2017");
                     string licenseFile = System.IO.Path.Combine(licenseFolder, "license.lic");
 
                     if (System.IO.File.Exists(licenseFile))
@@ -196,7 +196,7 @@ namespace TeklaTool.ViewModels
                     MessageBox.Show(
                         $"Không thể lưu license file!\n\n" +
                         $"Lỗi: {ex.Message}\n\n" +
-                        $"Đường dẫn: {System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TeklaTool", "license.lic")}\n\n" +
+                        $"Đường dẫn: {System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TeklaTool_2017", "license.lic")}\n\n" +
                         $"Vui lòng chạy ứng dụng với quyền Administrator.",
                         "Lỗi lưu file",
                         MessageBoxButton.OK,

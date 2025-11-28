@@ -1,18 +1,18 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.Management;
 using System.Security.Cryptography;
 using System.Text;
-using Newtonsoft.Json;
 
-namespace TeklaTool.Services
+namespace TeklaTool_2017.Services
 {
     public class LicenseService
     {
         private const string Secret = "TeklaSuperSecret2024";
         private static readonly string Base32Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
 
-        private const string LicenseFolderName = "TeklaTool";
+        private const string LicenseFolderName = "TeklaTool_2017";
         private const string LicenseFileName = "license.lic";
 
         #region Machine identity getters

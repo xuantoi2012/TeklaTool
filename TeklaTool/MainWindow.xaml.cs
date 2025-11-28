@@ -1,10 +1,10 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using TeklaTool.ViewModels;
-using TeklaTool.Views;
-using TeklaTool.Services; // Cần thêm using này để truy cập LicenseService
+using TeklaTool_2017.Services; // Cần thêm using này để truy cập LicenseService
+using TeklaTool_2017.ViewModels;
+using TeklaTool_2017.Views;
 
-namespace TeklaTool
+namespace TeklaTool_2017
 {
     public partial class MainWindow : Window
     {
@@ -69,5 +69,6 @@ namespace TeklaTool
                 // TODO: Thêm logic cập nhật trạng thái license trong MainViewModel nếu cần
             }
         }
+
     }
 }

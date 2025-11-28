@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
-using TeklaTool.Services;
-using TeklaTool.Views;
-using TeklaTool.ViewModels;
+using TeklaTool_2017.Services;
+using TeklaTool_2017.ViewModels;
+using TeklaTool_2017.Views;
 
-namespace TeklaTool
+namespace TeklaTool_2017
 {
     public partial class App : Application
     {
@@ -18,7 +18,7 @@ namespace TeklaTool
                 // Check if license file exists
                 string licenseFolder = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                    "TeklaTool");
+                    "TeklaTool_2017");
                 string licenseFile = Path.Combine(licenseFolder, "license.lic");
 
                 bool canProceed = false;

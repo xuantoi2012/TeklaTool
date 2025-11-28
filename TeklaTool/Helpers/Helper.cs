@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace TeklaTool.Helpers
+namespace TeklaTool_2017.Helpers
 {
     public class BaseViewModel : INotifyPropertyChanged
     {

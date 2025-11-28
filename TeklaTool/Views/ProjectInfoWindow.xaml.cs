@@ -1,22 +1,33 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.IO;
 using System.Windows;
-using System.Windows.Media.Imaging;
-using Microsoft.Win32;
-using TeklaTool.ViewModels;
+using TeklaTool_2017.ViewModels;
 
-namespace TeklaTool.Views
+namespace TeklaTool_2017.Views
 {
     public partial class ProjectInfoWindow : Window
     {
-        private string _logoPath;
-
         public ProjectInfoWindow()
         {
             InitializeComponent();
+
+            // ✅ Load logo preview sau khi DataContext được set
+            Loaded += ProjectInfoWindow_Loaded;
         }
 
-        public string LogoPath => _logoPath;
+        private void ProjectInfoWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            // ✅ Tự động hiển thị logo đã lưu từ JSON (nếu có)
+            if (DataContext is ProjectInfoViewModel vm)
+            {
+                // ViewModel đã tự load logo preview rồi, chỉ cần update UI text
+                if (!string.IsNullOrWhiteSpace(vm.LogoPath))
+                {
+                    LogoFileName.Text = Path.GetFileName(vm.LogoPath);
+                }
+            }
+        }
 
         private void BrowseLogo_Click(object sender, RoutedEventArgs e)
         {
@@ -25,7 +36,7 @@ namespace TeklaTool.Views
                 var openFileDialog = new OpenFileDialog
                 {
                     Title = "Chọn logo công ty",
-                    Filter = "Ảnh (*.png;*.jpg;*.jpeg;*.bmp)|*.png;*.jpg;*.jpeg;*.bmp",
+                    Filter = "Ảnh (*.png;*.jpg;*.jpeg;*.bmp)|*.png;*.jpg;*.jpeg;*.bmp|All Files|*.*",
                     FilterIndex = 1
                 };
 
@@ -43,21 +54,14 @@ namespace TeklaTool.Views
                         return;
                     }
 
-                    _logoPath = openFileDialog.FileName;
+                    // ✅ Update ViewModel (sẽ tự động trigger LoadLogoPreview())
+                    if (DataContext is ProjectInfoViewModel vm)
+                    {
+                        vm.LogoPath = openFileDialog.FileName;
 
-                    // Update UI
-                    LogoFileName.Text = Path.GetFileName(_logoPath);
-
-                    // Load and display preview
-                    var bitmap = new BitmapImage();
-                    bitmap.BeginInit();
-                    bitmap.UriSource = new Uri(_logoPath);
-                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmap.DecodePixelWidth = 120; // Optimize for preview
-                    bitmap.EndInit();
-                    bitmap.Freeze();
-
-                    LogoPreview.Source = bitmap;
+                        // Update UI text
+                        LogoFileName.Text = Path.GetFileName(openFileDialog.FileName);
+                    }
                 }
             }
             catch (Exception ex)
@@ -100,8 +104,8 @@ namespace TeklaTool.Views
                 return;
             }
 
-            // Store logo path in ViewModel
-            viewModel.LogoPath = _logoPath;
+            // ✅ Lưu thông tin vào JSON
+            viewModel.SaveCurrentInfo();
 
             DialogResult = true;
             Close();

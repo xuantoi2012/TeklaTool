@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace TeklaTool.Helpers
+namespace TeklaTool_2017.Helpers
 {
     // Sync RelayCommand
     public class RelayCommand : ICommand

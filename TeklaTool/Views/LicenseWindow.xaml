@@ -1,4 +1,4 @@
-﻿<Window x:Class="TeklaTool.Views.LicenseWindow"
+﻿<Window x:Class="TeklaTool_2017.Views.LicenseWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Quản lý bản quyền" 
@@ -46,7 +46,7 @@
                         Width="95"
                         Height="32"
                         Command="{Binding CopyIdCommand}" 
-                        Style="{StaticResource ThirdButton}"
+                        Style="{StaticResource  SecondaryButton}"
                         FontSize="11"/>
             </Grid>
 
@@ -88,12 +88,13 @@
                     <TextBlock Text="Trạng thái:" 
                                FontSize="10" 
                                FontWeight="Medium"
-                               Foreground="#166534"
+                               Foreground="#FF059669"
                                Margin="0,0,0,4"/>
                     <TextBlock Text="{Binding LicenseStatus}"
                                FontSize="12"
-                               Foreground="#15803D"
-                               TextWrapping="Wrap"/>
+                               Foreground="#FF059669"
+                               TextWrapping="Wrap"
+                               FontWeight="SemiBold"/>
                 </StackPanel>
             </Border>
 
