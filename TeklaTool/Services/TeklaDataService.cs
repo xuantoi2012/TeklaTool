@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Tekla.Structures.Model;
 using Tekla.Structures.Model.UI;
+using Tekla.Structures.Catalogs;
 using Task = System.Threading.Tasks.Task;
 
 namespace TeklaTool.Services
@@ -28,6 +29,10 @@ namespace TeklaTool.Services
         };
 
         private List<BoltGroup> _selectedBolts = new List<BoltGroup>();
+
+        // Static cache for profile weights to avoid recalculation
+        private static readonly Dictionary<string, double> _profileWeightCache = new Dictionary<string, double>();
+        private static readonly object _cacheLock = new object();
 
         public int TotalSelectedParts { get; private set; }
         public int TotalSelectedBolts { get; private set; }
@@ -132,42 +137,40 @@ namespace TeklaTool.Services
             await Task.Run(() =>
             {
                 var model = new Model();
-                var allObjects = model.GetModelObjectSelector().GetAllObjects();
 
                 foreach (var key in _selectedParts.Keys.ToList())
                     _selectedParts[key].Clear();
                 TotalSelectedParts = 0;
 
-                // Đếm số lượng Part
-                int totalParts = 0;
+                // Single pass: collect parts and count
                 var tempParts = new List<Part>();
-                var objectsEnum = model.GetModelObjectSelector().GetAllObjects();
-                while (objectsEnum.MoveNext())
-                {
-                    if (objectsEnum.Current is Part)
-                        totalParts++;
-                }
-
-                // Lấy lại và xử lý
-                int processed = 0;
                 var enumerator = model.GetModelObjectSelector().GetAllObjects();
                 while (enumerator.MoveNext())
                 {
                     if (enumerator.Current is Part part)
                     {
-                        string profileName = part.Profile.ProfileString;
-                        foreach (var filter in _materialFilters)
-                        {
-                            if (filter.Value.Any(prefix => profileName.StartsWith(prefix)))
-                            {
-                                _selectedParts[filter.Key].Add(part);
-                                break;
-                            }
-                        }
-                        TotalSelectedParts++;
-                        processed++;
-                        progress?.Report((processed, totalParts, $"Đang lấy dữ liệu của {processed}/{totalParts} Parts"));
+                        tempParts.Add(part);
                     }
+                }
+
+                int totalParts = tempParts.Count;
+                int processed = 0;
+
+                // Process collected parts
+                foreach (var part in tempParts)
+                {
+                    string profileName = part.Profile.ProfileString;
+                    foreach (var filter in _materialFilters)
+                    {
+                        if (filter.Value.Any(prefix => profileName.StartsWith(prefix)))
+                        {
+                            _selectedParts[filter.Key].Add(part);
+                            break;
+                        }
+                    }
+                    TotalSelectedParts++;
+                    processed++;
+                    progress?.Report((processed, totalParts, $"Đang lấy dữ liệu của {processed}/{totalParts} Parts"));
                 }
             });
         }
@@ -200,16 +203,13 @@ namespace TeklaTool.Services
                         double weight = 0;
                         part.GetReportProperty("WEIGHT", ref weight);
 
-                        lock (plateData)
+                        if (plateData.ContainsKey(thickness))
                         {
-                            if (plateData.ContainsKey(thickness))
-                            {
-                                plateData[thickness] = (plateData[thickness].weight + weight, material);
-                            }
-                            else
-                            {
-                                plateData[thickness] = (weight, material);
-                            }
+                            plateData[thickness] = (plateData[thickness].weight + weight, material);
+                        }
+                        else
+                        {
+                            plateData[thickness] = (weight, material);
                         }
                     }
 
@@ -303,16 +303,13 @@ namespace TeklaTool.Services
                         shapeWeightPerMeter[profileName] = GetShapeWeightPerMeter(profileName);
                     }
 
-                    lock (shapeData)
+                    if (shapeData.ContainsKey(profileName))
                     {
-                        if (shapeData.ContainsKey(profileName))
-                        {
-                            shapeData[profileName] = (shapeData[profileName].weight + weight, material);
-                        }
-                        else
-                        {
-                            shapeData[profileName] = (weight, material);
-                        }
+                        shapeData[profileName] = (shapeData[profileName].weight + weight, material);
+                    }
+                    else
+                    {
+                        shapeData[profileName] = (weight, material);
                     }
 
                     processedParts++;
@@ -346,31 +343,66 @@ namespace TeklaTool.Services
 
         private double GetShapeWeightPerMeter(string profileName)
         {
+            // Check static cache first
+            lock (_cacheLock)
+            {
+                if (_profileWeightCache.ContainsKey(profileName))
+                {
+                    return _profileWeightCache[profileName];
+                }
+            }
+
             double weight = 0;
 
             try
             {
-                // Create a temporary 1m beam to calculate weight
-                var beam = new Beam(
-                    new Tekla.Structures.Geometry3d.Point(0, 0, 0),
-                    new Tekla.Structures.Geometry3d.Point(1000, 0, 0)
-                );
-                beam.Profile.ProfileString = profileName;
-                beam.Material.MaterialString = "S235";
-                beam.Name = "TemporaryBeam";
+                // Try to get weight from Tekla catalog using ProfileItem
+                var profileItem = new Tekla.Structures.Catalogs.ProfileItem();
+                profileItem.ProfileString = profileName;
 
-                if (beam.Insert())
+                double area = 0;
+                profileItem.GetReportProperty("PROFILE.AREA", ref area);
+
+                if (area > 0)
                 {
-                    var model = new Model();
-                    model.CommitChanges();
+                    // Calculate weight: Area (mm²) * 1000mm * density (7850 kg/m³) / 1e9
+                    weight = area * 1000 * 7850 / 1e9; // Convert to kg
+                }
+                else
+                {
+                    // Fallback: create temporary beam (SLOW - only as last resort)
+                    var beam = new Beam(
+                        new Tekla.Structures.Geometry3d.Point(0, 0, 0),
+                        new Tekla.Structures.Geometry3d.Point(1000, 0, 0)
+                    );
+                    beam.Profile.ProfileString = profileName;
+                    beam.Material.MaterialString = "S235";
+                    beam.Name = "TemporaryBeam";
+                    beam.Class = "99";
 
-                    beam.GetReportProperty("WEIGHT", ref weight);
-                    beam.Delete();
+                    if (beam.Insert())
+                    {
+                        var model = new Model();
+                        model.CommitChanges();
+
+                        beam.GetReportProperty("WEIGHT", ref weight);
+                        beam.Delete();
+                        model.CommitChanges();
+                    }
                 }
             }
             catch
             {
                 // Return 0 if calculation fails
+            }
+
+            // Cache the result
+            lock (_cacheLock)
+            {
+                if (!_profileWeightCache.ContainsKey(profileName))
+                {
+                    _profileWeightCache[profileName] = weight;
+                }
             }
 
             return weight;
@@ -415,16 +447,13 @@ namespace TeklaTool.Services
                         int boltCount = 0;
                         bolt.GetReportProperty("NUMBER", ref boltCount);
 
-                        lock (boltData)
+                        if (boltData.ContainsKey(boltSize))
                         {
-                            if (boltData.ContainsKey(boltSize))
-                            {
-                                boltData[boltSize] += boltCount;
-                            }
-                            else
-                            {
-                                boltData[boltSize] = boltCount;
-                            }
+                            boltData[boltSize] += boltCount;
+                        }
+                        else
+                        {
+                            boltData[boltSize] = boltCount;
                         }
                     }
                     catch
@@ -490,23 +519,20 @@ namespace TeklaTool.Services
                         purlinWeightPerMeter[profileName] = GetShapeWeightPerMeter(profileName);
                     }
 
-                    lock (purlinData)
+                    if (purlinData.ContainsKey(assemblyName))
                     {
-                        if (purlinData.ContainsKey(assemblyName))
-                        {
-                            var currentData = purlinData[assemblyName];
-                            purlinData[assemblyName] = (
-                                currentData.weight + weight,
-                                currentData.quantity + quantity,
-                                currentData.length,
-                                material,
-                                profileName
-                            );
-                        }
-                        else
-                        {
-                            purlinData[assemblyName] = (weight, quantity, length, material, profileName);
-                        }
+                        var currentData = purlinData[assemblyName];
+                        purlinData[assemblyName] = (
+                            currentData.weight + weight,
+                            currentData.quantity + quantity,
+                            currentData.length,
+                            material,
+                            profileName
+                        );
+                    }
+                    else
+                    {
+                        purlinData[assemblyName] = (weight, quantity, length, material, profileName);
                     }
 
                     processedParts++;
